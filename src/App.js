@@ -31,6 +31,17 @@ class App extends Component {
   getVehicles() {
     // axios (GET)
     // setState with response -> vehiclesToDisplay
+    axios.get('http://joes-autos.herokuapp.com/api/vehicles').then(res => {
+      let { data } = res; // object destructuring
+      this.setState({
+        vehiclesToDisplay: data
+      })    
+      toast.success('Successfully got Vehicles')
+    })
+    .catch(err => {
+      console.log('err', err)
+    })
+
   }
 
   getPotentialBuyers() {
@@ -41,6 +52,16 @@ class App extends Component {
   sellCar(id) {
     // axios (DELETE)
     // setState with response -> vehiclesToDisplay
+    axios.delete(`https://joes-autos.herokuapp.com/api/vehicles/${id}`)
+    .then (res => {
+      let vehicles = res.data.vehicles
+      this.setState({
+        vehiclesToDisplay: vehicles
+      })
+    })
+    .catch( err => {
+      console.log('err in delete', err)
+    })
   }
 
   filterByMake() {
@@ -60,6 +81,17 @@ class App extends Component {
   updatePrice(priceChange, id) {
     // axios (PUT)
     // setState with response -> vehiclesToDisplay
+    console.log({'priceChange:': priceChange, "id": id});
+    axios.put(`https://joes-autos.herokuapp.com/api/vehicles/${id}/${priceChange}`)
+    .then( res => {
+      let vehicles = res.data.vehicles
+      this.setState({
+        vehiclesToDisplay: vehicles
+      })
+    })
+    .catch( err => {
+      console.log('err in catch', err)
+    })
   }
 
   addCar() {
@@ -70,7 +102,17 @@ class App extends Component {
       year: this.year.value,
       price: this.price.value
     };
-
+    axios.post('https://joes-autos.herokuapp.com/api/vehicles', newCar)
+    .then( res => {
+      console.log('res in add car', res)
+      let vehicles = res.data.vehicles
+      this.setState({
+        vehiclesToDisplay: vehicles
+      })
+    })
+    .catch(err => {
+      console.log('err', err)
+    })
     // axios (POST)
     // setState with response -> vehiclesToDisplay
   }
